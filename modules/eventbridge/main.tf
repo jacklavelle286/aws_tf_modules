@@ -2,6 +2,7 @@ resource "aws_cloudwatch_event_bus" "this" {
   name = var.eventbus_name
   description = var.description
   count = var.is_default_eventbus ? 0 : 1
+  tags = var.tags
 }
 
 

@@ -2,15 +2,11 @@ resource "aws_dynamodb_table" "this" {
   name           = var.name
   billing_mode   = var.billing_mode
 
-  # If using provisioned capacity, set these (they can be null for PAY_PER_REQUEST)
   read_capacity  = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
   write_capacity = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
 
   hash_key  = var.hash_key
   range_key = var.range_key
-
-  # Create attribute definitions dynamically.
-  # IMPORTANT: Ensure that every attribute defined here is used as either part of the key schema or in one or more indexes.
   dynamic "attribute" {
     for_each = var.attributes
     content {

@@ -44,3 +44,10 @@ variable "trusted_repo" {
   type        = string
   default     = "repo:jacklavelle286/*"
 }
+
+
+variable "repo_name" {
+  description = "The name of the ECR repo required to host various containers."
+  type = string
+  default = "lambda-container-repo"
+}

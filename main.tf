@@ -56,6 +56,7 @@ module "aws_s3_bucket" {
 }
 
 module "eventbridge" {
+  
   source = "./modules/eventbridge"
   eventbus_name = var.eventbus_name
   is_default_eventbus = false
@@ -64,6 +65,11 @@ module "eventbridge" {
   actions = ["PutEvents", "DescribeRule"]
   principal_type = "AWS"
   identifiers = [ "123836789016" ]
+  tags = local.default_tags
   resources = [ "arn:aws:events:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:event-bus/${var.eventbus_name}" ]
 
 }
+
+
+
+

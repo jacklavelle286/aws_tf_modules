@@ -1,3 +1,9 @@
+variable "tags" {
+  type = map(string)
+  description = "Tags applied to this resource."
+  default = {}
+}
+
 variable "is_default_eventbus" {
   type        = bool
   default     = true

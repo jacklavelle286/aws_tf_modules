@@ -9,6 +9,13 @@ terraform {
       version = "~>3.0"
     }
   }
+  backend "s3" {
+    bucket         = "438465154544-eu-west-2-backend-infra-tf-bootstrap-modules"
+    key            = "terraform.tfstate"
+    region         = "eu-west-2"
+    encrypt        = true
+    dynamodb_table = "438465154544-eu-west-2-backend-infra-tf-bootstrap-modules-lock"
+  }
 
 
 }
@@ -17,4 +24,6 @@ terraform {
 
 provider "aws" {
   region = var.region
+
 }
+

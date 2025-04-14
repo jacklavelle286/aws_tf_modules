@@ -66,3 +66,7 @@ resource "aws_dynamodb_table" "lock" {
 
 }
 
+
+resource "aws_ecr_repository" "lambda_repo" {
+  name = var.repo_name 
+}

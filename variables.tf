@@ -18,6 +18,7 @@ variable "project" {
 variable "region" {
   type = string
   description = "Region which the infrastructure is deployed in."
+  default = "eu-west-2"
 }
 
 variable "bucket_name" {
