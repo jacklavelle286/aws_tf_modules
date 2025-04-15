@@ -8,7 +8,7 @@ resource "aws_cloudwatch_event_bus" "this" {
 
 resource "aws_cloudwatch_event_bus_policy" "this" {
   count = var.is_default_eventbus ? 0 : 1
-  policy = data.aws_iam_policy_document.this[0].id
+  policy = data.aws_iam_policy_document.this[0].json
 }
 
 
