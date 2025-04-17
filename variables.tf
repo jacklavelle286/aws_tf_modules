@@ -31,3 +31,9 @@ variable "eventbus_name" {
   description = "eventbus name"
   default = "Testing"
 }
+
+
+variable "sfn_name" {
+  description = "Name of your SFN"
+  type = string
+}

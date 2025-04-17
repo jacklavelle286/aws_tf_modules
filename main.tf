@@ -2,6 +2,7 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
+
 # module "cloudfront" {
 #   source                 = "./modules/cloudfront"
 #   origin_id              = module.aws_s3_bucket.bucket_id
@@ -55,20 +56,66 @@ data "aws_caller_identity" "current" {}
 
 # }
 
-module "eventbridge" {
+# module "eventbridge" {
   
-  source = "./modules/eventbridge"
-  eventbus_name = var.eventbus_name
-  is_default_eventbus = true
-}
+#   source = "./modules/eventbridge"
+#   eventbus_name = var.eventbus_name
+#   is_default_eventbus = true
+# }
 
 
 
-module "lambda_function" {
-  source = "./modules/lambda_container"
-  function_name = "test_function"
-  image_uri = "438465154544.dkr.ecr.eu-west-2.amazonaws.com/lambda-container-repo:latest"
-  lambda_role_name = "lambdaRole"
+# module "lambda_function" {
+#   source = "./modules/lambda_container"
+#   function_name = "test_function"
+#   image_uri = "438465154544.dkr.ecr.eu-west-2.amazonaws.com/lambda-container-repo:latest"
+#   lambda_role_name = "lambdaRole"
+#   policy_statements = [
+#     {
+#       sid            = "AllowLambdaInvocation"
+#       effect         = "Allow"
+#       actions        = ["lambda:InvokeFunction"]
+#       resources      = ["arn:aws:lambda:us-east-1:123456789012:function:my-function"]
+#       principal_type = "AWS"
+#       identifiers    = ["arn:aws:iam::123456789012:root"]
+#     },
+#     {
+#       sid            = "AllowS3Access"
+#       effect         = "Allow"
+#       actions        = ["s3:GetObject"]
+#       resources      = ["arn:aws:s3:::my-bucket/*"]
+#     }
+#   ]
+# }
+
+# module "sns_topic" {
+#   source     = "./modules/sns"
+#   topic_name = "MyAwesomeTopic"
+#   tags = local.default_tags
+
+#   subscribers = [
+#     {
+#       protocol = "email"
+#       endpoint = "lavellej286@gmail.com"
+#     },
+#     {
+#       protocol = "sms"
+#       endpoint = "+447576875840"
+#     }
+#   ]
+# }
+
+
+# module "sqs_queue" {
+#   source = "./modules/sqs"
+#   sqs_queue_name = "test_queue"
+#   tags = local.default_tags
+  
+# }
+
+
+module "step_functions" {
+  tags = local.default_tags
   policy_statements = [
     {
       sid            = "AllowLambdaInvocation"
@@ -77,28 +124,22 @@ module "lambda_function" {
       resources      = ["arn:aws:lambda:us-east-1:123456789012:function:my-function"]
       principal_type = "AWS"
       identifiers    = ["arn:aws:iam::123456789012:root"]
-    },
-    {
-      sid            = "AllowS3Access"
-      effect         = "Allow"
-      actions        = ["s3:GetObject"]
-      resources      = ["arn:aws:s3:::my-bucket/*"]
     }
   ]
-}
 
-module "sns_topic" {
-  source     = "./modules/sns"
-  topic_name = "MyAwesomeTopic"
+  source   = "./modules/step_functions"
+  sfn_name =  var.sfn_name
+  start_at = "HelloState"
 
-  subscribers = [
-    {
-      protocol = "email"
-      endpoint = "lavellej286@gmail.com"
-    },
-    {
-      protocol = "sms"
-      endpoint = "+44576875840"
+  states = {
+    HelloState = {
+      Type     = "Task"
+      Resource = "arn:aws:lambda:us-east-1:123456789012:function:HelloFunction"
+      End      = true
     }
-  ]
+  }
 }
+
+
+
+
